@@ -42,7 +42,6 @@ func parseAtomExpr(p *parser.Parser) (Expr, *ast.ParseErr) {
 			Token: tok,
 		}, nil
 	default:
-		p.Unscan()
 		return nil, &ast.ParseErr{
 			Msg: fmt.Sprintf("unknown token at expression. got %v", tok),
 			Tok: tok,
