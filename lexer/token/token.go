@@ -24,3 +24,11 @@ type Token struct {
 	Text  []rune
 	Start int
 }
+
+func (t Token) StartPos() int {
+	return t.Start
+}
+
+func (t Token) EndPos() int {
+	return t.Start + len(t.Text)
+}
