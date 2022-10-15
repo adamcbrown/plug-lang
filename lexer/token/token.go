@@ -7,17 +7,25 @@ import (
 type Type int
 
 const (
-	Identifier Type = iota
+	Invalid Type = iota
+	Identifier
 	Integer
 	Whitespace
 	Character
+
+	// Keywords
+	Fn
 	EOF
 	Unknown
 )
 
 var SingleCharacters mapset.Set[rune] = mapset.NewSet(
-	'=',
+	'=', '{', '}', '(', ')', '-', '>', ':',
 )
+
+var Keywords map[string]Type = map[string]Type{
+	"fn": Fn,
+}
 
 type Token struct {
 	Type  Type
@@ -31,4 +39,12 @@ func (t Token) StartPos() int {
 
 func (t Token) EndPos() int {
 	return t.Start + len(t.Text)
+}
+
+func (t Token) IsValid() bool {
+	return t.Type != Invalid
+}
+
+func (t Token) IsRune(r rune) bool {
+	return t.Type == Character && len(t.Text) == 1 && t.Text[0] == r
 }

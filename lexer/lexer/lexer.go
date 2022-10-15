@@ -65,6 +65,9 @@ func (l *Lexer) Lex() token.Token {
 			}
 			l.pos += 1
 		}
+		if kw, ok := token.Keywords[string(l.data[start:l.pos])]; ok {
+			return l.makeToken(kw, start)
+		}
 		return l.makeToken(token.Identifier, start)
 	}
 	if isWhitespace(l.current()) {

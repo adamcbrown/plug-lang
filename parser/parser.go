@@ -1,31 +1,46 @@
 package parser
 
 import (
+	"log"
+
 	"github.com/acbrown/plug-lang/lexer/lexer"
 	"github.com/acbrown/plug-lang/lexer/token"
 )
 
+const BUFFER_MAX = 2
+
 type Parser struct {
 	l *lexer.Lexer
 
-	tok      token.Token
-	buffered bool
+	buffer    []token.Token
+	bufferIdx int
 }
 
 func NewParser(l *lexer.Lexer) *Parser {
 	return &Parser{
-		l: l,
+		l:      l,
+		buffer: make([]token.Token, 0, BUFFER_MAX),
 	}
 }
 
 func (p *Parser) Scan() token.Token {
-	if p.buffered {
-		p.buffered = false
-		return p.tok
+	if p.bufferIdx < len(p.buffer) {
+		tok := p.buffer[p.bufferIdx]
+		p.bufferIdx += 1
+		return tok
 	}
 
-	p.tok = p.l.Lex()
-	return p.tok
+	tok := p.l.Lex()
+	if len(p.buffer) < BUFFER_MAX {
+		p.buffer = append(p.buffer, tok)
+		p.bufferIdx += 1
+		return tok
+	}
+
+	// Shift elements in buffer down 1 element
+	copy(p.buffer, p.buffer[1:])
+	p.buffer[BUFFER_MAX-1] = tok
+	return tok
 }
 
 func (p *Parser) ScanIgnoreWS() token.Token {
@@ -36,5 +51,8 @@ func (p *Parser) ScanIgnoreWS() token.Token {
 }
 
 func (p *Parser) Unscan() {
-	p.buffered = true
+	if p.bufferIdx == 0 {
+		log.Fatal("Went below buffer. Need to increase buffer limit")
+	}
+	p.bufferIdx -= 1
 }
