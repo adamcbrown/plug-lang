@@ -78,47 +78,39 @@ func ParseFunctionType(p *parser.Parser) (FunctionType, *ParseErr) {
 		}
 	}
 
-	if tok := p.ScanIgnoreWS(); tok.IsRune('(') {
-		var outputs []Field
-		for {
-			tok := p.ScanIgnoreWS()
-			if tok.IsRune(')') {
-				return FunctionType{
-					FnToken:    fn,
-					Inputs:     inputs,
-					Outputs:    outputs,
-					CloseParen: tok,
-				}, nil
-			}
-			p.Unscan()
-
-			f, err := ParseField(p)
-			if err != nil {
-				return FunctionType{}, err
-			}
-			outputs = append(inputs, f)
-
-			if tok := p.Scan(); !tok.IsRune(',') && !tok.IsRune(')') {
-				return FunctionType{}, &ParseErr{
-					Msg: "expected `,` or `)` after field in function outputs",
-					Tok: tok,
-				}
-			} else if tok.IsRune(')') {
-				p.Unscan()
-			}
+	if tok := p.ScanIgnoreWS(); !tok.IsRune('(') {
+		return FunctionType{}, &ParseErr{
+			Msg: "expected `(` token after `->`",
+			Tok: tok,
 		}
 	}
 
-	p.Unscan()
-	output, err := ParseField(p)
-	if err != nil {
-		return FunctionType{}, err
-	}
+	var outputs []Field
+	for {
+		tok := p.ScanIgnoreWS()
+		if tok.IsRune(')') {
+			return FunctionType{
+				FnToken:    fn,
+				Inputs:     inputs,
+				Outputs:    outputs,
+				CloseParen: tok,
+			}, nil
+		}
+		p.Unscan()
 
-	return FunctionType{
-		FnToken:    fn,
-		Inputs:     inputs,
-		Outputs:    []Field{output},
-		CloseParen: token.Token{},
-	}, nil
+		f, err := ParseField(p)
+		if err != nil {
+			return FunctionType{}, err
+		}
+		outputs = append(outputs, f)
+
+		if tok := p.Scan(); !tok.IsRune(',') && !tok.IsRune(')') {
+			return FunctionType{}, &ParseErr{
+				Msg: "expected `,` or `)` after field in function outputs",
+				Tok: tok,
+			}
+		} else if tok.IsRune(')') {
+			p.Unscan()
+		}
+	}
 }

@@ -39,6 +39,11 @@ func TestAssignmentExpr(t *testing.T) {
 				},
 			},
 		},
+		{
+			name:   "function",
+			source: "fn(in: Int) -> (Int) { return = in }",
+			want:   ast.Modification{},
+		},
 	}
 
 	for _, tc := range tcs {

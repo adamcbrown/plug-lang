@@ -18,7 +18,7 @@ func TestFunction(t *testing.T) {
 	}{
 		{
 			name:   "unnamed fn output",
-			source: "fn() -> Int",
+			source: "fn() -> (Int)",
 			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
@@ -33,15 +33,20 @@ func TestFunction(t *testing.T) {
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
-								Start: 8,
+								Start: 9,
 							},
 						},
 					},
 				},
+				CloseParen: token.Token{
+					Type:  token.Character,
+					Text:  []rune(")"),
+					Start: 12,
+				},
 			},
 		},
 		{
-			name:   "named fn output with paren",
+			name:   "named fn output",
 			source: "fn() -> (out: Int)",
 			want: ast.FunctionType{
 				FnToken: token.Token{
@@ -76,38 +81,8 @@ func TestFunction(t *testing.T) {
 			},
 		},
 		{
-			name:   "named fn output no paren",
-			source: "fn() -> out: Int",
-			want: ast.FunctionType{
-				FnToken: token.Token{
-					Type:  token.Fn,
-					Text:  []rune("fn"),
-					Start: 0,
-				},
-				Inputs: nil,
-				Outputs: []ast.Field{
-					{
-						Name: ast.Name{
-							Token: token.Token{
-								Type:  token.Identifier,
-								Text:  []rune("out"),
-								Start: 8,
-							},
-						},
-						Type: ast.Reference{
-							Token: token.Token{
-								Type:  token.Identifier,
-								Text:  []rune("Int"),
-								Start: 13,
-							},
-						},
-					},
-				},
-			},
-		},
-		{
 			name:   "fn with input",
-			source: "fn(x: Int) -> y: Int",
+			source: "fn(x: Int) -> (y: Int)",
 			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
@@ -138,17 +113,22 @@ func TestFunction(t *testing.T) {
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("y"),
-								Start: 14,
+								Start: 15,
 							},
 						},
 						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
-								Start: 17,
+								Start: 18,
 							},
 						},
 					},
+				},
+				CloseParen: token.Token{
+					Type:  token.Character,
+					Text:  []rune(")"),
+					Start: 21,
 				},
 			},
 		},
