@@ -1,7 +1,6 @@
-package expr
+package ast
 
 import (
-	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/token"
 )
 
@@ -10,7 +9,7 @@ type Reference struct {
 	Token token.Token
 }
 
-var _ ast.Node = Reference{}
+var _ Node = Reference{}
 var _ Expr = Reference{}
 
 func (r Reference) Start() int {

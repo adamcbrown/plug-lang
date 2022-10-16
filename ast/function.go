@@ -1,18 +1,15 @@
-package function
+package ast
 
 import (
-	"github.com/acbrown/plug-lang/ast"
-	"github.com/acbrown/plug-lang/ast/expr"
-	"github.com/acbrown/plug-lang/ast/field"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
 )
 
 type FunctionType struct {
-	expr.ExprToken
+	ExprToken
 	FnToken    token.Token
-	Inputs     []field.Field
-	Outputs    []field.Field
+	Inputs     []Field
+	Outputs    []Field
 	CloseParen token.Token
 }
 
@@ -27,23 +24,23 @@ func (ft FunctionType) End() int {
 	return ft.Outputs[0].End()
 }
 
-func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
+func ParseFunctionType(p *parser.Parser) (FunctionType, *ParseErr) {
 	fn := p.ScanIgnoreWS()
 	if fn.Type != token.Fn {
-		return FunctionType{}, &ast.ParseErr{
+		return FunctionType{}, &ParseErr{
 			Msg: "expected `fn` token at start of function",
 			Tok: fn,
 		}
 	}
 
 	if tok := p.ScanIgnoreWS(); !tok.IsRune('(') {
-		return FunctionType{}, &ast.ParseErr{
+		return FunctionType{}, &ParseErr{
 			Msg: "expected `(` token after `fn`",
 			Tok: tok,
 		}
 	}
 
-	var inputs []field.Field
+	var inputs []Field
 	for {
 		tok := p.ScanIgnoreWS()
 		if tok.IsRune(')') {
@@ -51,14 +48,14 @@ func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
 		}
 		p.Unscan()
 
-		f, err := field.Parse(p)
+		f, err := ParseField(p)
 		if err != nil {
 			return FunctionType{}, err
 		}
 		inputs = append(inputs, f)
 
 		if tok := p.Scan(); !tok.IsRune(',') && !tok.IsRune(')') {
-			return FunctionType{}, &ast.ParseErr{
+			return FunctionType{}, &ParseErr{
 				Msg: "expected `,` or `)` after field in function outputs",
 				Tok: tok,
 			}
@@ -69,20 +66,20 @@ func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
 
 	arrowStart := p.ScanIgnoreWS()
 	if !arrowStart.IsRune('-') {
-		return FunctionType{}, &ast.ParseErr{
+		return FunctionType{}, &ParseErr{
 			Msg: "expected `->` token after fn arguments",
 			Tok: arrowStart,
 		}
 	}
 	if tok := p.Scan(); !tok.IsRune('>') {
-		return FunctionType{}, &ast.ParseErr{
+		return FunctionType{}, &ParseErr{
 			Msg: "expected `->` token after fn arguments",
 			Tok: arrowStart,
 		}
 	}
 
 	if tok := p.ScanIgnoreWS(); tok.IsRune('(') {
-		var outputs []field.Field
+		var outputs []Field
 		for {
 			tok := p.ScanIgnoreWS()
 			if tok.IsRune(')') {
@@ -95,14 +92,14 @@ func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
 			}
 			p.Unscan()
 
-			f, err := field.Parse(p)
+			f, err := ParseField(p)
 			if err != nil {
 				return FunctionType{}, err
 			}
 			outputs = append(inputs, f)
 
 			if tok := p.Scan(); !tok.IsRune(',') && !tok.IsRune(')') {
-				return FunctionType{}, &ast.ParseErr{
+				return FunctionType{}, &ParseErr{
 					Msg: "expected `,` or `)` after field in function outputs",
 					Tok: tok,
 				}
@@ -113,7 +110,7 @@ func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
 	}
 
 	p.Unscan()
-	output, err := field.Parse(p)
+	output, err := ParseField(p)
 	if err != nil {
 		return FunctionType{}, err
 	}
@@ -121,7 +118,7 @@ func Parse(p *parser.Parser) (FunctionType, *ast.ParseErr) {
 	return FunctionType{
 		FnToken:    fn,
 		Inputs:     inputs,
-		Outputs:    []field.Field{output},
+		Outputs:    []Field{output},
 		CloseParen: token.Token{},
 	}, nil
 }

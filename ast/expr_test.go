@@ -1,40 +1,41 @@
-package assignment
+package ast_test
 
 import (
 	"testing"
 
-	"github.com/acbrown/plug-lang/ast/expr"
-	"github.com/acbrown/plug-lang/ast/name"
+	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/lexer"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestAssignment(t *testing.T) {
+func TestAssignmentExpr(t *testing.T) {
 	tcs := []struct {
 		name   string
 		source string
-		want   Assignment
+		want   ast.Expr
 	}{
 		{
-			name:   "basic assignment",
-			source: "x = 10",
-			want: Assignment{
-				Name: name.Name{
-					Token: token.Token{
-						Type:  token.Identifier,
-						Text:  []rune("x"),
-						Start: 0,
-					},
+			name:   "integer",
+			source: "10",
+			want: ast.Constant[int]{
+				Token: token.Token{
+					Type:  token.Integer,
+					Text:  []rune("10"),
+					Start: 0,
 				},
-				Expr: expr.Constant[int]{
-					Token: token.Token{
-						Type:  token.Integer,
-						Text:  []rune("10"),
-						Start: 4,
-					},
-					Value: 10,
+				Value: 10,
+			},
+		},
+		{
+			name:   "reference",
+			source: "ref",
+			want: ast.Reference{
+				Token: token.Token{
+					Type:  token.Identifier,
+					Text:  []rune("ref"),
+					Start: 0,
 				},
 			},
 		},
@@ -43,7 +44,7 @@ func TestAssignment(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
-			got, err := Parse(p)
+			got, err := ast.ParseExpr(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)
 			}

@@ -1,7 +1,6 @@
-package name
+package ast
 
 import (
-	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/token"
 )
 
@@ -9,7 +8,7 @@ type Name struct {
 	Token token.Token
 }
 
-var _ ast.Node = Name{}
+var _ Node = Name{}
 
 func (i Name) Start() int {
 	return i.Token.StartPos()

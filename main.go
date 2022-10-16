@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/acbrown/plug-lang/ast/program"
+	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/lexer"
 	"github.com/acbrown/plug-lang/parser"
 )
@@ -17,7 +17,7 @@ var (
 func compile(data []rune) {
 	l := lexer.NewLexer(data)
 	p := parser.NewParser(l)
-	log.Print(program.Parse(p))
+	log.Print(ast.ParseProgram(p))
 }
 
 func main() {

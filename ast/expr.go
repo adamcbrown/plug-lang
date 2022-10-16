@@ -1,35 +1,45 @@
-package expr
+package ast
 
 import (
 	"fmt"
 	"strconv"
 
-	"github.com/acbrown/plug-lang/ast"
-	"github.com/acbrown/plug-lang/ast/function"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
 )
 
-type Expr interface {
-	ast.Node
-	exprNode()
+func ParseExpr(p *parser.Parser) (Expr, *ParseErr) {
+	return parsePostFixExpr(p)
 }
 
-type ExprToken struct{}
-
-func (ExprToken) exprNode() {}
-
-func Parse(p *parser.Parser) (Expr, *ast.ParseErr) {
-	return parseAtomExpr(p)
+func parsePostFixExpr(p *parser.Parser) (Expr, *ParseErr) {
+	expr, err := parseAtomExpr(p)
+	if err != nil {
+		return nil, err
+	}
+	for {
+		tok := p.ScanIgnoreWS()
+		if tok.IsRune('{') {
+			p.Unscan()
+			block, err := ParseBlock(p)
+			if err != nil {
+				return nil, err
+			}
+			expr = Modification{
+				Base:  expr,
+				Block: block,
+			}
+		}
+	}
 }
 
-func parseAtomExpr(p *parser.Parser) (Expr, *ast.ParseErr) {
+func parseAtomExpr(p *parser.Parser) (Expr, *ParseErr) {
 	tok := p.ScanIgnoreWS()
 	switch tok.Type {
 	case token.Integer:
 		parsedInt, err := strconv.ParseInt(string(tok.Text), 0, 64)
 		if err != nil {
-			return nil, &ast.ParseErr{
+			return nil, &ParseErr{
 				Msg: err.Error(),
 				Tok: tok,
 			}
@@ -44,9 +54,9 @@ func parseAtomExpr(p *parser.Parser) (Expr, *ast.ParseErr) {
 		}, nil
 	case token.Fn:
 		p.Unscan()
-		return function.Parse(p)
+		return ParseFunctionType(p)
 	default:
-		return nil, &ast.ParseErr{
+		return nil, &ParseErr{
 			Msg: fmt.Sprintf("unknown token at expression. got %v", tok),
 			Tok: tok,
 		}

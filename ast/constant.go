@@ -1,7 +1,6 @@
-package expr
+package ast
 
 import (
-	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/token"
 )
 
@@ -11,7 +10,7 @@ type Constant[T any] struct {
 	Value T
 }
 
-var _ ast.Node = Constant[any]{}
+var _ Node = Constant[any]{}
 var _ Expr = Constant[any]{}
 
 func (c Constant[T]) Start() int {

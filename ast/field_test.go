@@ -1,11 +1,9 @@
-package field_test
+package ast_test
 
 import (
 	"testing"
 
-	"github.com/acbrown/plug-lang/ast/expr"
-	"github.com/acbrown/plug-lang/ast/field"
-	"github.com/acbrown/plug-lang/ast/name"
+	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/lexer"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
@@ -16,20 +14,20 @@ func TestField(t *testing.T) {
 	tcs := []struct {
 		name   string
 		source string
-		want   field.Field
+		want   ast.Field
 	}{
 		{
 			name:   "named field",
 			source: "x: Int",
-			want: field.Field{
-				Name: name.Name{
+			want: ast.Field{
+				Name: ast.Name{
 					Token: token.Token{
 						Type:  token.Identifier,
 						Text:  []rune("x"),
 						Start: 0,
 					},
 				},
-				Type: expr.Reference{
+				Type: ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
 						Text:  []rune("Int"),
@@ -41,9 +39,9 @@ func TestField(t *testing.T) {
 		{
 			name:   "unnamed field",
 			source: "Int",
-			want: field.Field{
-				Name: name.Name{},
-				Type: expr.Reference{
+			want: ast.Field{
+				Name: ast.Name{},
+				Type: ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
 						Text:  []rune("Int"),
@@ -57,7 +55,7 @@ func TestField(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
-			got, err := field.Parse(p)
+			got, err := ast.ParseField(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)
 			}

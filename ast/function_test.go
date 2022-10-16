@@ -1,12 +1,9 @@
-package function_test
+package ast_test
 
 import (
 	"testing"
 
-	"github.com/acbrown/plug-lang/ast/expr"
-	"github.com/acbrown/plug-lang/ast/field"
-	"github.com/acbrown/plug-lang/ast/function"
-	"github.com/acbrown/plug-lang/ast/name"
+	"github.com/acbrown/plug-lang/ast"
 	"github.com/acbrown/plug-lang/lexer/lexer"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
@@ -17,22 +14,22 @@ func TestFunction(t *testing.T) {
 	tcs := []struct {
 		name   string
 		source string
-		want   function.FunctionType
+		want   ast.FunctionType
 	}{
 		{
 			name:   "unnamed fn output",
 			source: "fn() -> Int",
-			want: function.FunctionType{
+			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
 					Text:  []rune("fn"),
 					Start: 0,
 				},
 				Inputs: nil,
-				Outputs: []field.Field{
+				Outputs: []ast.Field{
 					{
-						Name: name.Name{},
-						Type: expr.Reference{
+						Name: ast.Name{},
+						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
@@ -46,23 +43,23 @@ func TestFunction(t *testing.T) {
 		{
 			name:   "named fn output with paren",
 			source: "fn() -> (out: Int)",
-			want: function.FunctionType{
+			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
 					Text:  []rune("fn"),
 					Start: 0,
 				},
 				Inputs: nil,
-				Outputs: []field.Field{
+				Outputs: []ast.Field{
 					{
-						Name: name.Name{
+						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("out"),
 								Start: 9,
 							},
 						},
-						Type: expr.Reference{
+						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
@@ -81,23 +78,23 @@ func TestFunction(t *testing.T) {
 		{
 			name:   "named fn output no paren",
 			source: "fn() -> out: Int",
-			want: function.FunctionType{
+			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
 					Text:  []rune("fn"),
 					Start: 0,
 				},
 				Inputs: nil,
-				Outputs: []field.Field{
+				Outputs: []ast.Field{
 					{
-						Name: name.Name{
+						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("out"),
 								Start: 8,
 							},
 						},
-						Type: expr.Reference{
+						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
@@ -111,22 +108,22 @@ func TestFunction(t *testing.T) {
 		{
 			name:   "fn with input",
 			source: "fn(x: Int) -> y: Int",
-			want: function.FunctionType{
+			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
 					Text:  []rune("fn"),
 					Start: 0,
 				},
-				Inputs: []field.Field{
+				Inputs: []ast.Field{
 					{
-						Name: name.Name{
+						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("x"),
 								Start: 3,
 							},
 						},
-						Type: expr.Reference{
+						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
@@ -135,16 +132,16 @@ func TestFunction(t *testing.T) {
 						},
 					},
 				},
-				Outputs: []field.Field{
+				Outputs: []ast.Field{
 					{
-						Name: name.Name{
+						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("y"),
 								Start: 14,
 							},
 						},
-						Type: expr.Reference{
+						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  []rune("Int"),
@@ -160,7 +157,7 @@ func TestFunction(t *testing.T) {
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
 			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
-			got, err := function.Parse(p)
+			got, err := ast.ParseFunctionType(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)
 			}
