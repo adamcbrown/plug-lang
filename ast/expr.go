@@ -19,8 +19,8 @@ func parsePostFixExpr(p *parser.Parser) (Expr, *ParseErr) {
 	}
 	for {
 		tok := p.ScanIgnoreWS()
+		p.Unscan()
 		if tok.IsRune('{') {
-			p.Unscan()
 			block, err := ParseBlock(p)
 			if err != nil {
 				return nil, err
@@ -29,7 +29,9 @@ func parsePostFixExpr(p *parser.Parser) (Expr, *ParseErr) {
 				Base:  expr,
 				Block: block,
 			}
+			continue
 		}
+		return expr, nil
 	}
 }
 
