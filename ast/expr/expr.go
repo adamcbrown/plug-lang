@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/acbrown/plug-lang/ast"
+	"github.com/acbrown/plug-lang/ast/function"
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
 )
@@ -41,6 +42,9 @@ func parseAtomExpr(p *parser.Parser) (Expr, *ast.ParseErr) {
 		return Reference{
 			Token: tok,
 		}, nil
+	case token.Fn:
+		p.Unscan()
+		return function.Parse(p)
 	default:
 		return nil, &ast.ParseErr{
 			Msg: fmt.Sprintf("unknown token at expression. got %v", tok),
