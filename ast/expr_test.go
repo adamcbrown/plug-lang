@@ -42,7 +42,79 @@ func TestAssignmentExpr(t *testing.T) {
 		{
 			name:   "function",
 			source: "fn(in: Int) -> (Int) { return = in }",
-			want:   ast.Modification{},
+			want: ast.Modification{
+				Base: ast.FunctionType{
+					FnToken: token.Token{
+						Type:  token.Fn,
+						Text:  []rune("fn"),
+						Start: 0,
+					},
+					Inputs: []ast.Field{
+						{
+							Name: ast.Name{
+								Token: token.Token{
+									Type:  token.Identifier,
+									Text:  []rune("in"),
+									Start: 3,
+								},
+							},
+							Type: ast.Reference{
+								Token: token.Token{
+									Type:  token.Identifier,
+									Text:  []rune("Int"),
+									Start: 7,
+								},
+							},
+						},
+					},
+					Outputs: []ast.Field{
+						{
+							Type: ast.Reference{
+								Token: token.Token{
+									Type:  token.Identifier,
+									Text:  []rune("Int"),
+									Start: 16,
+								},
+							},
+						},
+					},
+					CloseParen: token.Token{
+						Type:  token.Character,
+						Text:  []rune(")"),
+						Start: 19,
+					},
+				},
+				Block: ast.Block{
+					LCurly: token.Token{
+						Type:  token.Character,
+						Text:  []rune("{"),
+						Start: 21,
+					},
+					Assignments: []ast.Assignment{
+						{
+							Name: ast.Name{
+								Token: token.Token{
+									Type:  token.Identifier,
+									Text:  []rune("return"),
+									Start: 23,
+								},
+							},
+							Expr: ast.Reference{
+								Token: token.Token{
+									Type:  token.Identifier,
+									Text:  []rune("in"),
+									Start: 32,
+								},
+							},
+						},
+					},
+					RCurly: token.Token{
+						Type:  token.Character,
+						Text:  []rune("}"),
+						Start: 35,
+					},
+				},
+			},
 		},
 	}
 
