@@ -23,14 +23,14 @@ func TestField(t *testing.T) {
 				Name: ast.Name{
 					Token: token.Token{
 						Type:  token.Identifier,
-						Text:  []rune("x"),
+						Text:  "x",
 						Start: 0,
 					},
 				},
 				Type: ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
-						Text:  []rune("Int"),
+						Text:  "Int",
 						Start: 3,
 					},
 				},
@@ -44,7 +44,7 @@ func TestField(t *testing.T) {
 				Type: ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
-						Text:  []rune("Int"),
+						Text:  "Int",
 						Start: 0,
 					},
 				},
@@ -54,7 +54,7 @@ func TestField(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseField(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)

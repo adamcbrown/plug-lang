@@ -22,12 +22,12 @@ func TestBlock(t *testing.T) {
 			want: ast.Block{
 				LCurly: token.Token{
 					Type:  token.Character,
-					Text:  []rune("{"),
+					Text:  "{",
 					Start: 0,
 				},
 				RCurly: token.Token{
 					Type:  token.Character,
-					Text:  []rune("}"),
+					Text:  "}",
 					Start: 1,
 				},
 			},
@@ -38,7 +38,7 @@ func TestBlock(t *testing.T) {
 			want: ast.Block{
 				LCurly: token.Token{
 					Type:  token.Character,
-					Text:  []rune("{"),
+					Text:  "{",
 					Start: 0,
 				},
 				Assignments: []ast.Assignment{
@@ -46,14 +46,14 @@ func TestBlock(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("x"),
+								Text:  "x",
 								Start: 1,
 							},
 						},
 						Expr: ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
-								Text:  []rune("1"),
+								Text:  "1",
 								Start: 5,
 							},
 							Value: 1,
@@ -62,7 +62,7 @@ func TestBlock(t *testing.T) {
 				},
 				RCurly: token.Token{
 					Type:  token.Character,
-					Text:  []rune("}"),
+					Text:  "}",
 					Start: 6,
 				},
 			},
@@ -71,7 +71,7 @@ func TestBlock(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseBlock(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)

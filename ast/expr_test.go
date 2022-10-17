@@ -22,7 +22,7 @@ func TestAssignmentExpr(t *testing.T) {
 			want: ast.Constant[int]{
 				Token: token.Token{
 					Type:  token.Integer,
-					Text:  []rune("10"),
+					Text:  "10",
 					Start: 0,
 				},
 				Value: 10,
@@ -34,7 +34,7 @@ func TestAssignmentExpr(t *testing.T) {
 			want: ast.Reference{
 				Token: token.Token{
 					Type:  token.Identifier,
-					Text:  []rune("ref"),
+					Text:  "ref",
 					Start: 0,
 				},
 			},
@@ -46,7 +46,7 @@ func TestAssignmentExpr(t *testing.T) {
 				Base: ast.FunctionType{
 					FnToken: token.Token{
 						Type:  token.Fn,
-						Text:  []rune("fn"),
+						Text:  "fn",
 						Start: 0,
 					},
 					Inputs: []ast.Field{
@@ -54,14 +54,14 @@ func TestAssignmentExpr(t *testing.T) {
 							Name: ast.Name{
 								Token: token.Token{
 									Type:  token.Identifier,
-									Text:  []rune("in"),
+									Text:  "in",
 									Start: 3,
 								},
 							},
 							Type: ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
-									Text:  []rune("Int"),
+									Text:  "Int",
 									Start: 7,
 								},
 							},
@@ -72,7 +72,7 @@ func TestAssignmentExpr(t *testing.T) {
 							Type: ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
-									Text:  []rune("Int"),
+									Text:  "Int",
 									Start: 16,
 								},
 							},
@@ -80,14 +80,14 @@ func TestAssignmentExpr(t *testing.T) {
 					},
 					CloseParen: token.Token{
 						Type:  token.Character,
-						Text:  []rune(")"),
+						Text:  ")",
 						Start: 19,
 					},
 				},
 				Block: ast.Block{
 					LCurly: token.Token{
 						Type:  token.Character,
-						Text:  []rune("{"),
+						Text:  "{",
 						Start: 21,
 					},
 					Assignments: []ast.Assignment{
@@ -95,14 +95,14 @@ func TestAssignmentExpr(t *testing.T) {
 							Name: ast.Name{
 								Token: token.Token{
 									Type:  token.Identifier,
-									Text:  []rune("return"),
+									Text:  "return",
 									Start: 23,
 								},
 							},
 							Expr: ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
-									Text:  []rune("in"),
+									Text:  "in",
 									Start: 32,
 								},
 							},
@@ -110,7 +110,7 @@ func TestAssignmentExpr(t *testing.T) {
 					},
 					RCurly: token.Token{
 						Type:  token.Character,
-						Text:  []rune("}"),
+						Text:  "}",
 						Start: 35,
 					},
 				},
@@ -120,7 +120,7 @@ func TestAssignmentExpr(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseExpr(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)

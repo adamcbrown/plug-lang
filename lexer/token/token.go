@@ -29,7 +29,7 @@ var Keywords map[string]Type = map[string]Type{
 
 type Token struct {
 	Type  Type
-	Text  []rune
+	Text  string
 	Start int
 }
 
@@ -46,5 +46,5 @@ func (t Token) IsValid() bool {
 }
 
 func (t Token) IsRune(r rune) bool {
-	return t.Type == Character && len(t.Text) == 1 && t.Text[0] == r
+	return t.Type == Character && len(t.Text) == 1 && t.Text == string(r)
 }

@@ -25,14 +25,14 @@ func TestProgram(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("x"),
+								Text:  "x",
 								Start: 0,
 							},
 						},
 						Expr: ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
-								Text:  []rune("1"),
+								Text:  "1",
 								Start: 4,
 							},
 							Value: 1,
@@ -42,14 +42,14 @@ func TestProgram(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("y"),
+								Text:  "y",
 								Start: 7,
 							},
 						},
 						Expr: ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
-								Text:  []rune("2"),
+								Text:  "2",
 								Start: 9,
 							},
 							Value: 2,
@@ -62,7 +62,7 @@ func TestProgram(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseProgram(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)

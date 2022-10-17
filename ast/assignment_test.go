@@ -23,14 +23,14 @@ func TestAssignment(t *testing.T) {
 				Name: ast.Name{
 					Token: token.Token{
 						Type:  token.Identifier,
-						Text:  []rune("x"),
+						Text:  "x",
 						Start: 0,
 					},
 				},
 				Expr: ast.Constant[int]{
 					Token: token.Token{
 						Type:  token.Integer,
-						Text:  []rune("10"),
+						Text:  "10",
 						Start: 4,
 					},
 					Value: 10,
@@ -41,7 +41,7 @@ func TestAssignment(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseAssignment(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)

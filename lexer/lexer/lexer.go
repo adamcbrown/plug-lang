@@ -1,6 +1,8 @@
 package lexer
 
 import (
+	"unicode/utf8"
+
 	"github.com/acbrown/plug-lang/lexer/token"
 )
 
@@ -17,11 +19,11 @@ func isWhitespace(r rune) bool {
 }
 
 type Lexer struct {
-	data []rune
+	data string
 	pos  int
 }
 
-func NewLexer(data []rune) *Lexer {
+func NewLexer(data string) *Lexer {
 	return &Lexer{
 		data: data,
 		pos:  0,
@@ -29,7 +31,8 @@ func NewLexer(data []rune) *Lexer {
 }
 
 func (l *Lexer) current() rune {
-	return l.data[l.pos]
+	r, _ := utf8.DecodeRuneInString(l.data[l.pos:])
+	return r
 }
 
 func (l *Lexer) makeToken(typ token.Type, start int) token.Token {
@@ -42,7 +45,7 @@ func (l *Lexer) makeToken(typ token.Type, start int) token.Token {
 
 func (l *Lexer) Lex() token.Token {
 	if len(l.data) == l.pos {
-		return token.Token{Type: token.EOF, Text: []rune("<EOF>"), Start: l.pos}
+		return token.Token{Type: token.EOF, Text: "<EOF>", Start: l.pos}
 	}
 	start := l.pos
 	if token.SingleCharacters.Contains(l.current()) {

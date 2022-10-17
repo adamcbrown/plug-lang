@@ -14,7 +14,7 @@ var (
 	src = flag.String("src", "", "source file to compile")
 )
 
-func compile(data []rune) {
+func compile(data string) {
 	l := lexer.NewLexer(data)
 	p := parser.NewParser(l)
 	log.Print(ast.ParseProgram(p))
@@ -32,5 +32,5 @@ func main() {
 		log.Fatalf("Failed to read file: %v", err)
 	}
 
-	compile([]rune(string(data)))
+	compile(string(data))
 }

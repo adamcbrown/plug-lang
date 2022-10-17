@@ -22,7 +22,7 @@ func TestFunction(t *testing.T) {
 			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
-					Text:  []rune("fn"),
+					Text:  "fn",
 					Start: 0,
 				},
 				Inputs: nil,
@@ -32,7 +32,7 @@ func TestFunction(t *testing.T) {
 						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("Int"),
+								Text:  "Int",
 								Start: 9,
 							},
 						},
@@ -40,7 +40,7 @@ func TestFunction(t *testing.T) {
 				},
 				CloseParen: token.Token{
 					Type:  token.Character,
-					Text:  []rune(")"),
+					Text:  ")",
 					Start: 12,
 				},
 			},
@@ -51,7 +51,7 @@ func TestFunction(t *testing.T) {
 			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
-					Text:  []rune("fn"),
+					Text:  "fn",
 					Start: 0,
 				},
 				Inputs: nil,
@@ -60,14 +60,14 @@ func TestFunction(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("out"),
+								Text:  "out",
 								Start: 9,
 							},
 						},
 						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("Int"),
+								Text:  "Int",
 								Start: 14,
 							},
 						},
@@ -75,7 +75,7 @@ func TestFunction(t *testing.T) {
 				},
 				CloseParen: token.Token{
 					Type:  token.Character,
-					Text:  []rune(")"),
+					Text:  ")",
 					Start: 17,
 				},
 			},
@@ -86,7 +86,7 @@ func TestFunction(t *testing.T) {
 			want: ast.FunctionType{
 				FnToken: token.Token{
 					Type:  token.Fn,
-					Text:  []rune("fn"),
+					Text:  "fn",
 					Start: 0,
 				},
 				Inputs: []ast.Field{
@@ -94,14 +94,14 @@ func TestFunction(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("x"),
+								Text:  "x",
 								Start: 3,
 							},
 						},
 						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("Int"),
+								Text:  "Int",
 								Start: 6,
 							},
 						},
@@ -112,14 +112,14 @@ func TestFunction(t *testing.T) {
 						Name: ast.Name{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("y"),
+								Text:  "y",
 								Start: 15,
 							},
 						},
 						Type: ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
-								Text:  []rune("Int"),
+								Text:  "Int",
 								Start: 18,
 							},
 						},
@@ -127,7 +127,7 @@ func TestFunction(t *testing.T) {
 				},
 				CloseParen: token.Token{
 					Type:  token.Character,
-					Text:  []rune(")"),
+					Text:  ")",
 					Start: 21,
 				},
 			},
@@ -136,7 +136,7 @@ func TestFunction(t *testing.T) {
 
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			p := parser.NewParser(lexer.NewLexer([]rune(tc.source)))
+			p := parser.NewParser(lexer.NewLexer(tc.source))
 			got, err := ast.ParseFunctionType(p)
 			if err != nil {
 				t.Fatalf("Parse(): err = %v", err)
