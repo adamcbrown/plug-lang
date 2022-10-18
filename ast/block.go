@@ -21,18 +21,18 @@ func (p *Block) End() int {
 	return p.RCurly.EndPos()
 }
 
-func (b *Block) Enter(ctx *Context) {
-	scope := make(map[string]Node, len(b.Assignments))
+func (b *Block) AddReferences(ctx *Context) {
+	scope := make(map[string]Expr, len(b.Assignments))
 	for i := range b.Assignments {
 		a := &b.Assignments[i]
-		scope[a.Name.Token.Text] = a
+		scope[a.Name.Token.Text] = a.Expr
 	}
 
 	ctx.PushScope(scope)
 	defer ctx.PopScope()
 
 	for i := range b.Assignments {
-		(&b.Assignments[i]).Enter(ctx)
+		(&b.Assignments[i]).AddReferences(ctx)
 	}
 }
 
@@ -72,5 +72,4 @@ loop:
 		Assignments: as,
 		RCurly:      rCurly,
 	}, nil
-
 }

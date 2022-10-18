@@ -23,8 +23,8 @@ func (f *Field) End() int {
 	return f.Type.End()
 }
 
-func (f *Field) Enter(ctx *Context) {
-	f.Type.Enter(ctx)
+func (f *Field) AddReferences(ctx *Context) {
+	f.Type.AddReferences(ctx)
 }
 
 func ParseField(p *parser.Parser) (Field, *ParseErr) {

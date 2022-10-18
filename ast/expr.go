@@ -6,7 +6,19 @@ import (
 
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
+	"github.com/acbrown/plug-lang/types"
 )
+
+type Expr interface {
+	Node
+	AsType(*Context) types.Type
+	Type(*Context) types.Type
+	exprNode()
+}
+
+type ExprToken struct{}
+
+func (ExprToken) exprNode() {}
 
 func ParseExpr(p *parser.Parser) (Expr, *ParseErr) {
 	return parsePostFixExpr(p)

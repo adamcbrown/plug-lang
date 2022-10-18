@@ -166,7 +166,7 @@ func TestFunction(t *testing.T) {
 				t.Fatalf("Parse(): err = %v", err)
 			}
 
-			if diff := cmp.Diff(tc.want, got); diff != "" {
+			if diff := cmp.Diff(tc.want, got, ast.IgnoreOpt); diff != "" {
 				t.Errorf("Unexpected diff (-want, +got):\n%s", diff)
 			}
 		})

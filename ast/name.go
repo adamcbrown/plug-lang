@@ -18,4 +18,4 @@ func (i *Name) End() int {
 	return i.Token.EndPos()
 }
 
-func (n *Name) Enter(*Context) {}
+func (n *Name) AddReferences(*Context) {}

@@ -25,18 +25,18 @@ func (p *Program) End() int {
 	return p.Assignments[len(p.Assignments)-1].End()
 }
 
-func (p *Program) Enter(ctx *Context) {
-	scope := make(map[string]Node, len(p.Assignments))
+func (p *Program) AddReferences(ctx *Context) {
+	scope := make(map[string]Expr, len(p.Assignments))
 	for i := range p.Assignments {
 		a := &p.Assignments[i]
-		scope[a.Name.Token.Text] = a
+		scope[a.Name.Token.Text] = a.Expr
 	}
 
 	ctx.PushScope(scope)
 	defer ctx.PopScope()
 
 	for i := range p.Assignments {
-		(&p.Assignments[i]).Enter(ctx)
+		(&p.Assignments[i]).AddReferences(ctx)
 	}
 }
 
@@ -52,8 +52,13 @@ func ParseProgram(p *parser.Parser) (Program, *ParseErr) {
 				return Program{}, err
 			}
 			as = append(as, a)
-		default:
+		case token.EOF:
 			return Program{as}, nil
+		default:
+			return Program{}, &ParseErr{
+				Msg: "unknown token",
+				Tok: tok,
+			}
 		}
 	}
 

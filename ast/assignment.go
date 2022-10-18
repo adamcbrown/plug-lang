@@ -22,8 +22,8 @@ func (a *Assignment) End() int {
 	return a.Expr.End()
 }
 
-func (a *Assignment) Enter(ctx *Context) {
-	a.Expr.Enter(ctx)
+func (a *Assignment) AddReferences(ctx *Context) {
+	a.Expr.AddReferences(ctx)
 }
 
 func ParseAssignment(p *parser.Parser) (Assignment, *ParseErr) {

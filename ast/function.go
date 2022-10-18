@@ -1,8 +1,11 @@
 package ast
 
 import (
+	"sync"
+
 	"github.com/acbrown/plug-lang/lexer/token"
 	"github.com/acbrown/plug-lang/parser"
+	"github.com/acbrown/plug-lang/types"
 )
 
 type FunctionType struct {
@@ -11,6 +14,9 @@ type FunctionType struct {
 	Inputs     []Field
 	Outputs    []Field
 	CloseParen token.Token
+
+	typeOnce sync.Once
+	typ      types.FunctionType
 }
 
 var _ Expr = &FunctionType{}
@@ -26,7 +32,31 @@ func (ft *FunctionType) End() int {
 	return ft.Outputs[0].End()
 }
 
-func (ft *FunctionType) Enter(ctx *Context) {}
+func (ft *FunctionType) AddReferences(ctx *Context) {}
+
+func (ft *FunctionType) Type(ctx *Context) types.Type {
+	return types.TypeType
+}
+
+func (ft *FunctionType) AsType(ctx *Context) types.Type {
+	ft.typeOnce.Do(func() {
+		inputs := make([]types.Type, 0, len(ft.Inputs))
+		for _, input := range ft.Inputs {
+			inputs = append(inputs, input.Type.Type(ctx))
+		}
+
+		outputs := make([]types.Type, 0, len(ft.Outputs))
+		for _, output := range ft.Outputs {
+			outputs = append(outputs, output.Type.Type(ctx))
+		}
+
+		ft.typ = types.FunctionType{
+			Inputs:  inputs,
+			Outputs: outputs,
+		}
+	})
+	return ft.typ
+}
 
 func ParseFunctionType(p *parser.Parser) (FunctionType, *ParseErr) {
 	p.EnterType()
