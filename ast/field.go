@@ -24,6 +24,9 @@ func (f Field) End() int {
 }
 
 func ParseField(p *parser.Parser) (Field, *ParseErr) {
+	p.EnterType()
+	defer p.ExitType()
+
 	nameTok := p.ScanIgnoreWS()
 	if nameTok.Type != token.Identifier {
 		p.Unscan()

@@ -41,7 +41,7 @@ func TestAssignmentExpr(t *testing.T) {
 		},
 		{
 			name:   "function",
-			source: "fn(in: Int) -> (Int) { return = in }",
+			source: "fn(in: Int) -> Int { return = in }",
 			want: ast.Modification{
 				Base: ast.FunctionType{
 					FnToken: token.Token{
@@ -73,7 +73,7 @@ func TestAssignmentExpr(t *testing.T) {
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "Int",
-									Start: 16,
+									Start: 15,
 								},
 							},
 						},

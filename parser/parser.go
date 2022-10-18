@@ -12,6 +12,8 @@ const BUFFER_MAX = 2
 type Parser struct {
 	l *lexer.Lexer
 
+	typeParseCounter int
+
 	buffer    []token.Token
 	bufferIdx int
 }
@@ -21,6 +23,18 @@ func NewParser(l *lexer.Lexer) *Parser {
 		l:      l,
 		buffer: make([]token.Token, 0, BUFFER_MAX),
 	}
+}
+
+func (p *Parser) EnterType() {
+	p.typeParseCounter += 1
+}
+
+func (p *Parser) ExitType() {
+	p.typeParseCounter -= 1
+}
+
+func (p *Parser) InFunction() bool {
+	return p.typeParseCounter > 0
 }
 
 func (p *Parser) Scan() token.Token {

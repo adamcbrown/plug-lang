@@ -46,6 +46,30 @@ func TestFunction(t *testing.T) {
 			},
 		},
 		{
+			name:   "unnamed fn output no tuple",
+			source: "fn() -> Int",
+			want: ast.FunctionType{
+				FnToken: token.Token{
+					Type:  token.Fn,
+					Text:  "fn",
+					Start: 0,
+				},
+				Inputs: nil,
+				Outputs: []ast.Field{
+					{
+						Name: ast.Name{},
+						Type: ast.Reference{
+							Token: token.Token{
+								Type:  token.Identifier,
+								Text:  "Int",
+								Start: 8,
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name:   "named fn output",
 			source: "fn() -> (out: Int)",
 			want: ast.FunctionType{

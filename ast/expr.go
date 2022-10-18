@@ -20,7 +20,7 @@ func parsePostFixExpr(p *parser.Parser) (Expr, *ParseErr) {
 	for {
 		tok := p.ScanIgnoreWS()
 		p.Unscan()
-		if tok.IsRune('{') {
+		if !p.InFunction() && tok.IsRune('{') {
 			block, err := ParseBlock(p)
 			if err != nil {
 				return nil, err
