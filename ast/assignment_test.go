@@ -27,7 +27,7 @@ func TestAssignment(t *testing.T) {
 						Start: 0,
 					},
 				},
-				Expr: ast.Constant[int]{
+				Expr: &ast.Constant[int]{
 					Token: token.Token{
 						Type:  token.Integer,
 						Text:  "10",

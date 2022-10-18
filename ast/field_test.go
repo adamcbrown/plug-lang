@@ -27,7 +27,7 @@ func TestField(t *testing.T) {
 						Start: 0,
 					},
 				},
-				Type: ast.Reference{
+				Type: &ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
 						Text:  "Int",
@@ -41,7 +41,7 @@ func TestField(t *testing.T) {
 			source: "Int",
 			want: ast.Field{
 				Name: ast.Name{},
-				Type: ast.Reference{
+				Type: &ast.Reference{
 					Token: token.Token{
 						Type:  token.Identifier,
 						Text:  "Int",

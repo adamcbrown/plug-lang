@@ -29,7 +29,7 @@ func TestProgram(t *testing.T) {
 								Start: 0,
 							},
 						},
-						Expr: ast.Constant[int]{
+						Expr: &ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
 								Text:  "1",
@@ -46,7 +46,7 @@ func TestProgram(t *testing.T) {
 								Start: 7,
 							},
 						},
-						Expr: ast.Constant[int]{
+						Expr: &ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
 								Text:  "2",

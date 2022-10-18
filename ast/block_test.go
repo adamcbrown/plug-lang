@@ -50,7 +50,7 @@ func TestBlock(t *testing.T) {
 								Start: 1,
 							},
 						},
-						Expr: ast.Constant[int]{
+						Expr: &ast.Constant[int]{
 							Token: token.Token{
 								Type:  token.Integer,
 								Text:  "1",

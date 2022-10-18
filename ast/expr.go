@@ -25,7 +25,7 @@ func parsePostFixExpr(p *parser.Parser) (Expr, *ParseErr) {
 			if err != nil {
 				return nil, err
 			}
-			expr = Modification{
+			expr = &Modification{
 				Base:  expr,
 				Block: block,
 			}
@@ -46,17 +46,21 @@ func parseAtomExpr(p *parser.Parser) (Expr, *ParseErr) {
 				Tok: tok,
 			}
 		}
-		return Constant[int]{
+		return &Constant[int]{
 			Token: tok,
 			Value: int(parsedInt),
 		}, nil
 	case token.Identifier:
-		return Reference{
+		return &Reference{
 			Token: tok,
 		}, nil
 	case token.Fn:
 		p.Unscan()
-		return ParseFunctionType(p)
+		fnType, err := ParseFunctionType(p)
+		if err != nil {
+			return nil, err
+		}
+		return &fnType, nil
 	default:
 		return nil, &ParseErr{
 			Msg: fmt.Sprintf("unknown token at expression. got %v", tok),

@@ -12,17 +12,17 @@ type Assignment struct {
 	Expr Expr
 }
 
-var _ Node = Assignment{}
+var _ Node = &Assignment{}
 
-func (a Assignment) Start() int {
+func (a *Assignment) Start() int {
 	return a.Name.Start()
 }
 
-func (a Assignment) End() int {
+func (a *Assignment) End() int {
 	return a.Expr.End()
 }
 
-func (a Assignment) Enter(ctx *Context) {
+func (a *Assignment) Enter(ctx *Context) {
 	a.Expr.Enter(ctx)
 }
 

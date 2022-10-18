@@ -11,17 +11,17 @@ type Block struct {
 	RCurly      token.Token
 }
 
-var _ Node = Block{}
+var _ Node = &Block{}
 
-func (p Block) Start() int {
+func (p *Block) Start() int {
 	return p.LCurly.StartPos()
 }
 
-func (p Block) End() int {
+func (p *Block) End() int {
 	return p.RCurly.EndPos()
 }
 
-func (b Block) Enter(ctx *Context) {
+func (b *Block) Enter(ctx *Context) {
 	scope := make(map[string]Node, len(b.Assignments))
 	for i := range b.Assignments {
 		a := &b.Assignments[i]

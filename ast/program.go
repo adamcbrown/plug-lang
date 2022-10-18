@@ -9,23 +9,23 @@ type Program struct {
 	Assignments []Assignment
 }
 
-var _ Node = Program{}
+var _ Node = &Program{}
 
-func (p Program) Start() int {
+func (p *Program) Start() int {
 	if len(p.Assignments) == 0 {
 		return 0
 	}
 	return p.Assignments[0].Start()
 }
 
-func (p Program) End() int {
+func (p *Program) End() int {
 	if len(p.Assignments) == 0 {
 		return 0
 	}
 	return p.Assignments[len(p.Assignments)-1].End()
 }
 
-func (p Program) Enter(ctx *Context) {
+func (p *Program) Enter(ctx *Context) {
 	scope := make(map[string]Node, len(p.Assignments))
 	for i := range p.Assignments {
 		a := &p.Assignments[i]

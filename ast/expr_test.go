@@ -19,7 +19,7 @@ func TestAssignmentExpr(t *testing.T) {
 		{
 			name:   "integer",
 			source: "10",
-			want: ast.Constant[int]{
+			want: &ast.Constant[int]{
 				Token: token.Token{
 					Type:  token.Integer,
 					Text:  "10",
@@ -31,7 +31,7 @@ func TestAssignmentExpr(t *testing.T) {
 		{
 			name:   "reference",
 			source: "ref",
-			want: ast.Reference{
+			want: &ast.Reference{
 				Token: token.Token{
 					Type:  token.Identifier,
 					Text:  "ref",
@@ -42,8 +42,8 @@ func TestAssignmentExpr(t *testing.T) {
 		{
 			name:   "function",
 			source: "fn(in: Int) -> Int { return = in }",
-			want: ast.Modification{
-				Base: ast.FunctionType{
+			want: &ast.Modification{
+				Base: &ast.FunctionType{
 					FnToken: token.Token{
 						Type:  token.Fn,
 						Text:  "fn",
@@ -58,7 +58,7 @@ func TestAssignmentExpr(t *testing.T) {
 									Start: 3,
 								},
 							},
-							Type: ast.Reference{
+							Type: &ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "Int",
@@ -69,7 +69,7 @@ func TestAssignmentExpr(t *testing.T) {
 					},
 					Outputs: []ast.Field{
 						{
-							Type: ast.Reference{
+							Type: &ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "Int",
@@ -94,7 +94,7 @@ func TestAssignmentExpr(t *testing.T) {
 									Start: 21,
 								},
 							},
-							Expr: ast.Reference{
+							Expr: &ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "in",

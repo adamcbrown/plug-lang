@@ -29,7 +29,7 @@ func TestFunction(t *testing.T) {
 				Outputs: []ast.Field{
 					{
 						Name: ast.Name{},
-						Type: ast.Reference{
+						Type: &ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  "Int",
@@ -58,7 +58,7 @@ func TestFunction(t *testing.T) {
 				Outputs: []ast.Field{
 					{
 						Name: ast.Name{},
-						Type: ast.Reference{
+						Type: &ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  "Int",
@@ -88,7 +88,7 @@ func TestFunction(t *testing.T) {
 								Start: 9,
 							},
 						},
-						Type: ast.Reference{
+						Type: &ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  "Int",
@@ -122,7 +122,7 @@ func TestFunction(t *testing.T) {
 								Start: 3,
 							},
 						},
-						Type: ast.Reference{
+						Type: &ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  "Int",
@@ -140,7 +140,7 @@ func TestFunction(t *testing.T) {
 								Start: 15,
 							},
 						},
-						Type: ast.Reference{
+						Type: &ast.Reference{
 							Token: token.Token{
 								Type:  token.Identifier,
 								Text:  "Int",

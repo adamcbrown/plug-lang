@@ -10,20 +10,20 @@ type Field struct {
 	Type Expr
 }
 
-var _ Node = Field{}
+var _ Node = &Field{}
 
-func (f Field) Start() int {
+func (f *Field) Start() int {
 	if f.Name.Token.IsValid() {
 		return f.Name.Start()
 	}
 	return f.Type.Start()
 }
 
-func (f Field) End() int {
+func (f *Field) End() int {
 	return f.Type.End()
 }
 
-func (f Field) Enter(ctx *Context) {
+func (f *Field) Enter(ctx *Context) {
 	f.Type.Enter(ctx)
 }
 
