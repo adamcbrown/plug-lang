@@ -78,17 +78,12 @@ func TestAssignmentExpr(t *testing.T) {
 							},
 						},
 					},
-					CloseParen: token.Token{
-						Type:  token.Character,
-						Text:  ")",
-						Start: 19,
-					},
 				},
 				Block: ast.Block{
 					LCurly: token.Token{
 						Type:  token.Character,
 						Text:  "{",
-						Start: 21,
+						Start: 19,
 					},
 					Assignments: []ast.Assignment{
 						{
@@ -96,14 +91,14 @@ func TestAssignmentExpr(t *testing.T) {
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "return",
-									Start: 23,
+									Start: 21,
 								},
 							},
 							Expr: ast.Reference{
 								Token: token.Token{
 									Type:  token.Identifier,
 									Text:  "in",
-									Start: 32,
+									Start: 30,
 								},
 							},
 						},
@@ -111,7 +106,7 @@ func TestAssignmentExpr(t *testing.T) {
 					RCurly: token.Token{
 						Type:  token.Character,
 						Text:  "}",
-						Start: 35,
+						Start: 33,
 					},
 				},
 			},
