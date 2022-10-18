@@ -23,6 +23,10 @@ func (f Field) End() int {
 	return f.Type.End()
 }
 
+func (f Field) Enter(ctx *Context) {
+	f.Type.Enter(ctx)
+}
+
 func ParseField(p *parser.Parser) (Field, *ParseErr) {
 	p.EnterType()
 	defer p.ExitType()

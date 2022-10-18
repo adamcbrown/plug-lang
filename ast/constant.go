@@ -20,3 +20,5 @@ func (c Constant[T]) Start() int {
 func (c Constant[T]) End() int {
 	return c.Token.EndPos()
 }
+
+func (c Constant[T]) Enter(ctx *Context)

@@ -19,3 +19,5 @@ func (r Reference) Start() int {
 func (r Reference) End() int {
 	return r.Token.EndPos()
 }
+
+func (r Reference) Enter(ctx *Context) {}

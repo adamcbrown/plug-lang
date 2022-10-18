@@ -21,6 +21,21 @@ func (p Block) End() int {
 	return p.RCurly.EndPos()
 }
 
+func (b Block) Enter(ctx *Context) {
+	scope := make(map[string]Node, len(b.Assignments))
+	for i := range b.Assignments {
+		a := &b.Assignments[i]
+		scope[a.Name.Token.Text] = a
+	}
+
+	ctx.PushScope(scope)
+	defer ctx.PopScope()
+
+	for i := range b.Assignments {
+		(&b.Assignments[i]).Enter(ctx)
+	}
+}
+
 func ParseBlock(p *parser.Parser) (Block, *ParseErr) {
 	lCurly := p.ScanIgnoreWS()
 	if lCurly.Type != token.Character || string(lCurly.Text) != "{" {

@@ -13,6 +13,8 @@ type FunctionType struct {
 	CloseParen token.Token
 }
 
+var _ Expr = FunctionType{}
+
 func (ft FunctionType) Start() int {
 	return ft.FnToken.StartPos()
 }
@@ -23,6 +25,8 @@ func (ft FunctionType) End() int {
 	}
 	return ft.Outputs[0].End()
 }
+
+func (ft FunctionType) Enter(ctx *Context) {}
 
 func ParseFunctionType(p *parser.Parser) (FunctionType, *ParseErr) {
 	p.EnterType()

@@ -15,3 +15,8 @@ func (m Modification) Start() int {
 func (m Modification) End() int {
 	return m.Block.End()
 }
+
+func (m Modification) Enter(ctx *Context) {
+	m.Base.Enter(ctx)
+	m.Block.Enter(ctx)
+}

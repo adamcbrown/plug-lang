@@ -25,6 +25,21 @@ func (p Program) End() int {
 	return p.Assignments[len(p.Assignments)-1].End()
 }
 
+func (p Program) Enter(ctx *Context) {
+	scope := make(map[string]Node, len(p.Assignments))
+	for i := range p.Assignments {
+		a := &p.Assignments[i]
+		scope[a.Name.Token.Text] = a
+	}
+
+	ctx.PushScope(scope)
+	defer ctx.PopScope()
+
+	for i := range p.Assignments {
+		(&p.Assignments[i]).Enter(ctx)
+	}
+}
+
 func ParseProgram(p *parser.Parser) (Program, *ParseErr) {
 	var as []Assignment
 	for {
